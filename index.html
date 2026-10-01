@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대구대학교 분실물 찾기</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      color: #202b3c;
+      background: #f6f8fc;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e7eaf0;
+      padding: 18px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .logo { font-size: 21px; font-weight: 800; color: #2459a9; }
+    nav { display: flex; gap: 18px; align-items: center; }
+    nav a { text-decoration: none; color: #475569; font-size: 14px; }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary { background: #2459a9; color: white; }
+    .secondary { background: white; color: #2459a9; border: 1px solid #cbd8ee; }
+    .hero {
+      background: linear-gradient(130deg, #eaf2ff, #f8fbff);
+      padding: 55px 7% 45px;
+    }
+    .hero h1 { font-size: clamp(28px, 4vw, 42px); margin: 0 0 14px; line-height: 1.35; }
+    .hero p { color: #58677d; line-height: 1.8; }
+    .search-box {
+      margin-top: 25px;
+      max-width: 720px;
+      display: flex;
+      gap: 8px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #d7deea;
+      border-radius: 9px;
+      padding: 12px;
+      font: inherit;
+      background: white;
+    }
+    .search-box input { flex: 1; min-width: 0; }
+    main { max-width: 1150px; margin: 0 auto; padding: 32px 22px 60px; }
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 38px;
+    }
+    .quick-card {
+      background: white;
+      border: 1px solid #e4e9f1;
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .quick-card .emoji { font-size: 27px; }
+    .quick-card h3 { margin: 12px 0 6px; }
+    .quick-card p { font-size: 13px; line-height: 1.6; color: #718096; margin-bottom: 0; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .section-head h2 { font-size: 23px; margin: 0; }
+    .filters { display: flex; gap: 9px; margin-bottom: 18px; }
+    .filters select { max-width: 180px; }
+    .items {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .item-card {
+      background: white;
+      border: 1px solid #e4e9f1;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .item-image {
+      min-height: 145px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #edf3fc;
+      font-size: 54px;
+    }
+    .item-content { padding: 17px; }
+    .tag {
+      display: inline-block;
+      padding: 5px 8px;
+      background: #e9f2ff;
+      color: #2459a9;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .item-content h3 { margin: 12px 0 8px; font-size: 17px; }
+    .item-content p { color: #66758a; font-size: 13px; line-height: 1.6; }
+    .empty { display: none; padding: 35px; text-align: center; color: #718096; }
+    .map-box {
+      margin-top: 42px;
+      padding: 26px;
+      background: white;
+      border: 1px solid #e4e9f1;
+      border-radius: 14px;
+    }
+    .map-placeholder {
+      background: #edf3ec;
+      border-radius: 10px;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #526b52;
+      padding: 20px;
+      line-height: 1.8;
+    }
+    footer { text-align: center; color: #8490a2; font-size: 12px; padding: 25px; }
+    dialog {
+      width: min(520px, calc(100% - 28px));
+      border: 0;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 15px 60px #1b2d4a30;
+    }
+    dialog::backdrop { background: #17253c80; }
+    dialog h2 { margin-top: 0; }
+    .form-field { margin: 14px 0; }
+    .form-field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    @media (max-width: 700px) {
+      header { padding: 15px 5%; }
+      nav { gap: 9px; }
+      nav a { display: none; }
+      .hero { padding: 38px 5%; }
+      main { padding: 25px 15px 45px; }
+      .quick-links { grid-template-columns: 1fr; }
+      .items { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .item-image { min-height: 110px; font-size: 42px; }
+      .item-content { padding: 12px; }
+      .filters { flex-wrap: wrap; }
+      .filters select { flex: 1; min-width: 120px; }
+    }
+    @media (max-width: 420px) {
+      .items { grid-template-columns: 1fr; }
+      .search-box { flex-wrap: wrap; }
+      .search-box button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🔎 우리 학교 분실물 찾기</div>
+    <nav>
+      <a href="#items">분실물 찾기</a>
+      <a href="#map">지도</a>
+      <button class="primary" onclick="openForm()">+ 물건 등록</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>잃어버린 물건,<br>함께 찾아봐요!</h1>
+    <p>대구대학교 교내 분실물과 습득물 정보를 한곳에서 확인하세요.</p>
+    <div class="search-box">
+      <input id="searchInput" type="search" placeholder="예: 지갑, 학생회관, 이어폰">
+      <button class="primary" onclick="filterItems()">검색하기</button>
+    </div>
+  </section>
+
+  <main>
+    <section class="quick-links">
+      <div class="quick-card">
+        <div class="emoji">🔍</div>
+        <h3>분실물 찾기</h3>
+        <p>잃어버린 물건의 이름과 특징을 검색해 보세요.</p>
+      </div>
+      <div class="quick-card">
+        <div class="emoji">📦</div>
+        <h3>습득물 등록</h3>
+        <p>물건을 발견했다면 정보를 등록해 주인을 찾아주세요.</p>
+      </div>
+      <div class="quick-card">
+        <div class="emoji">📍</div>
+        <h3>장소 확인</h3>
+        <p>물건을 잃어버리거나 발견한 장소를 확인하세요.</p>
+      </div>
+    </section>
+
+    <section id="items">
+      <div class="section-head">
+        <h2>최근 등록된 물건</h2>
+        <button class="secondary" onclick="openForm()">물건 등록하기</button>
+      </div>
+
+      <div class="filters">
+        <select id="typeFilter" onchange="filterItems()">
+          <option value="all">전체 게시글</option>
+          <option value="lost">분실물</option>
+          <option value="found">습득물</option>
+        </select>
+        <select id="categoryFilter" onchange="filterItems()">
+          <option value="all">모든 종류</option>
+          <option value="전자기기">전자기기</option>
+          <option value="지갑·카드">지갑·카드</option>
+          <option value="가방·의류">가방·의류</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+
+      <div class="items" id="itemList">
+        <article class="item-card" data-type="found" data-category="전자기기" data-search="무선 이어폰 공학관">
+          <div class="item-image">🎧</div>
+          <div class="item-content">
+            <span class="tag">습득물 · 예시</span>
+            <h3>무선 이어폰</h3>
+            <p>📍 공학관 주변<br>📅 예시 게시글</p>
+          </div>
+        </article>
+        <article class="item-card" data-type="lost" data-category="지갑·카드" data-search="검은색 지갑 도서관">
+          <div class="item-image">👛</div>
+          <div class="item-content">
+            <span class="tag">분실물 · 예시</span>
+            <h3>검은색 지갑</h3>
+            <p>📍 중앙도서관 주변<br>📅 예시 게시글</p>
+          </div>
+        </article>
+        <article class="item-card" data-type="found" data-category="가방·의류" data-search="회색 가방 학생회관">
+          <div class="item-image">🎒</div>
+          <div class="item-content">
+            <span class="tag">습득물 · 예시</span>
+            <h3>회색 가방</h3>
+            <p>📍 학생회관 주변<br>📅 예시 게시글</p>
+          </div>
+        </article>
+      </div>
+      <div class="empty" id="emptyMessage">검색 결과가 없습니다.</div>
+      <p style="font-size:12px;color:#8490a2;margin-top:16px;">
+        ※ 위 물건들은 화면 확인용 예시입니다. 실제 분실물 정보가 아닙니다.
+      </p>
+    </section>
+
+    <section class="map-box" id="map">
+      <div class="section-head">
+        <h2>📍 분실 장소 지도</h2>
+      </div>
+      <div class="map-placeholder">
+        지도 기능은 다음 단계에서 연결할 예정입니다.<br>
+        실제 지도와 위치 표시는 아직 작동하지 않습니다.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    우리 학교 분실물 찾기 · 물건을 안전하게 돌려주기 위한 연결 공간
+  </footer>
+
+  <dialog id="registerDialog">
+    <h2>분실물 · 습득물 등록</h2>
+    <p style="color:#718096;font-size:13px;">
+      현재는 화면 시제품입니다. 입력한 정보는 저장되지 않습니다.
+    </p>
+    <form id="registerForm">
+      <div class="form-field">
+        <label for="itemType">등록 종류</label>
+        <select id="itemType">
+          <option value="lost">분실물</option>
+          <option value="found">습득물</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="itemName">물건 이름</label>
+        <input id="itemName" required placeholder="예: 검은색 지갑">
+      </div>
+      <div class="form-field">
+        <label for="itemLocation">장소</label>
+        <input id="itemLocation" required placeholder="예: 중앙도서관">
+      </div>
+      <div class="form-field">
+        <label for="itemDescription">특징</label>
+        <textarea id="itemDescription" rows="3" placeholder="물건의 특징을 적어 주세요."></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="secondary" onclick="closeForm()">닫기</button>
+        <button type="submit" class="primary">등록 확인</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    function filterItems() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const type = document.getElementById('typeFilter').value;
+      const category = document.getElementById('categoryFilter').value;
+      const cards = document.querySelectorAll('.item-card');
+      let visible = 0;
+
+      cards.forEach(card => {
+        const matchesText = (card.innerText + ' ' + card.dataset.search)
+          .toLowerCase().includes(query);
+        const matchesType = type === 'all' || card.dataset.type === type;
+        const matchesCategory = category === 'all' || card.dataset.category === category;
+        const show = matchesText && matchesType && matchesCategory;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      document.getElementById('emptyMessage').style.display =
+        visible === 0 ? 'block' : 'none';
+    }
+
+    document.getElementById('searchInput').addEventListener('keydown', event => {
+      if (event.key === 'Enter') filterItems();
+    });
+
+    function openForm() {
+      document.getElementById('registerDialog').showModal();
+    }
+
+    function closeForm() {
+      document.getElementById('registerDialog').close();
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', event => {
+      event.preventDefault();
+      alert('현재는 화면 시제품입니다. 실제 게시글 저장 기능은 다음 단계에서 연결할 예정입니다.');
+    });
+  </script>
+</body>
+</html>
